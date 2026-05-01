@@ -1,0 +1,64 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    match /users/{userId} {
+      allow get: if isOwner(userId);
+      allow create, update: if isOwner(userId) && isValidUserProfile(request.resource.data);
+      
+      match /resumes/{resumeId} {
+        allow list, get: if isOwner(userId);
+        allow create, update: if isOwner(userId) && isValidResume(request.resource.data);
+        allow delete: if isOwner(userId);
+      }
+
+      match /applications/{applicationId} {
+        allow list, get: if isOwner(userId);
+        allow create, update: if isOwner(userId) && isValidApplication(request.resource.data);
+        allow delete: if isOwner(userId);
+      }
+    }
+
+    match /jobs/{jobId} {
+      allow list, get: if isSignedIn();
+      allow create: if isSignedIn(); // Allow users to "add" discovered jobs
+    }
+
+    function isValidUserProfile(data) {
+      return data.userId == request.auth.uid
+        && data.fullName is string && data.fullName.size() <= 100
+        && (data.get('email', null) == null || (data.email is string && data.email.size() <= 100))
+        && (data.get('phone', null) == null || (data.phone is string && data.phone.size() <= 20))
+        && (data.get('workHistory', null) == null || data.workHistory is list)
+        && (data.get('jobTitles', null) == null || data.jobTitles is list)
+        && (data.get('preferredLocations', null) == null || data.preferredLocations is list);
+    }
+
+    function isValidResume(data) {
+      return data.userId == request.auth.uid
+        && data.jobType is string && data.jobType.size() <= 100
+        && data.content is string && data.content.size() <= 50000;
+    }
+
+    function isValidApplication(data) {
+      return data.userId == request.auth.uid
+        && data.jobId is string
+        && data.status in ['Draft', 'Tailoring', 'Applied', 'Rejected', 'Interviewing', 'Failed'];
+    }
+  }
+}

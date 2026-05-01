@@ -1,0 +1,81 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "User Profile",
+      "description": "User preferences and general information for job applications",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "fullName": { "type": "string" },
+        "email": { "type": "string" },
+        "phone": { "type": "string" },
+        "workHistory": { "type": "array" },
+        "education": { "type": "array" },
+        "skills": { "type": "array" },
+        "preferredLocations": { "type": "array", "description": "e.g. ['Remote', 'Tampa, FL']" },
+        "jobTitles": { "type": "array", "description": "Target job titles" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "fullName"]
+    },
+    "Resume": {
+      "title": "Resume",
+      "description": "A specific resume version for a job type",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "jobType": { "type": "string" },
+        "content": { "type": "string" },
+        "skills": { "type": "array" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "jobType", "content"]
+    },
+    "Job": {
+      "title": "Job Listing",
+      "description": "Scraped or added job listing information",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string" },
+        "company": { "type": "string" },
+        "location": { "type": "string" },
+        "description": { "type": "string" },
+        "url": { "type": "string" },
+        "source": { "type": "string", "enum": ["LinkedIn", "Indeed", "Dice", "ZipRecruiter", "Manual"] },
+        "isRemote": { "type": "boolean" },
+        "discoveredAt": { "type": "string", "format": "date-time" }
+      }
+    },
+    "Application": {
+      "title": "Job Application",
+      "description": "Record of a tailored application",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "jobId": { "type": "string" },
+        "status": { "type": "string", "enum": ["Draft", "Tailoring", "Applied", "Rejected", "Interviewing"] },
+        "tailoredResume": { "type": "string" },
+        "coverLetter": { "type": "string" },
+        "appliedAt": { "type": "string", "format": "date-time" }
+      }
+    }
+  },
+  "firestore": {
+    "users/{userId}": {
+      "schema": "UserProfile",
+      "description": "User-specific profiles and preferences"
+    },
+    "users/{userId}/resumes/{resumeId}": {
+      "schema": "Resume",
+      "description": "User resume versions"
+    },
+    "users/{userId}/applications/{applicationId}": {
+      "schema": "Application",
+      "description": "Applications submitted by the user"
+    },
+    "jobs/{jobId}": {
+      "schema": "Job",
+      "description": "Global cache of discovered jobs"
+    }
+  }
+}
