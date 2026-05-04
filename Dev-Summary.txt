@@ -1,0 +1,35 @@
+# ApplyFlow.AI - Developer Summary
+
+## Project Overview
+ApplyFlow.AI is an automated career trajectory optimization engine. It helps users find jobs, tailor their resumes and cover letters to specific job descriptions, and generate answers to common job application questions using Google's Gemini AI models.
+
+## Application Functionality
+- **Job Search**: Uses Gemini 1.5 Flash with Google Search grounding to find real-time job openings across major platforms like LinkedIn, Indeed, Dice, and ZipRecruiter.
+- **Resume Tailoring**: Leverages Gemini 1.5 Pro to analyze a user's resume against a job description and rewrite it for maximum ATS compatibility and relevance.
+- **Cover Letter Generation**: Automatically creates professional, personalized cover letters tailored to specific roles.
+- **Automated Q&A**: Answers specific job application questions based on the user's resume content.
+
+## Technologies Used
+- **Frontend**: React 18, TypeScript, Vite.
+- **Styling**: Tailwind CSS for responsive and modern UI.
+- **Backend**: Node.js with Express.
+- **AI Engine**: Google Generative AI (@google/genai). The development environment automatically provides the `GEMINI_API_KEY` in the environment, so no manual configuration is needed during the preview.
+- **Development Tools**: tsx (for running TypeScript directly), dotenv (environment variables), Vite Middleware (for seamless dev/prod integration).
+
+## File Structure & Responsibilities
+- `server.ts`: The main entry point. Handles API routes, AI interactions via the Gemini SDK, and serves the static frontend in production or proxied Vite middleware in development.
+- `src/App.tsx`: The main React component containing the application layout and state management.
+- `src/services/geminiService.ts`: Client-side service layer for making HTTP requests to the backend API endpoints.
+- `src/main.tsx`: Entry point for the React application.
+- `src/index.css`: Global styles including Tailwind CSS imports.
+- `vite.config.ts`: Configuration for the Vite build tool and development server.
+- `package.json`: Manages dependencies and scripts (dev, build, start).
+- `.env.example`: Template for required environment variables like `GEMINI_API_KEY`.
+- `firebase-applet-config.json`: Configuration for Firebase, though the app currently uses a custom Express backend for AI tasks.
+
+## Programming Concepts
+- **Full-Stack Integration**: Using Express to host both a REST API and a SPA (Single Page Application).
+- **Asynchronous Programming**: Extensive use of `async/await` for API calls and AI model generation.
+- **AI Grounding**: Implementation of Google Search grounding to provide real-time data instead of just static training data.
+- **Environment Management**: Securely handling API keys on the server-side to prevent exposure in the client browser.
+- **Responsive Design**: Mobile-first approach using Tailwind utility classes.

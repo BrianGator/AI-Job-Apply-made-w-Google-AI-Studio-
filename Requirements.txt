@@ -1,0 +1,34 @@
+# Project Requirements: ApplyFlow.AI
+
+## Core Objective
+Build a web application that automates the job search and application process, providing users with a competitive edge through AI-driven optimization of their career materials.
+
+## Technical Specifications
+- **Language**: TypeScript
+- **Frontend Framework**: React with Vite
+- **Backend Framework**: Express.js
+- **Styling**: Tailwind CSS
+- **AI Model**: Google Gemini API (@google/genai)
+
+## Feature Requirements
+1. **Job Aggregator**:
+   - Ability to search for jobs by title and location.
+   - Integration with Google Search grounding to fetch live results from major job boards.
+   - Output structured data: Title, Company, Location, URL, and remote status.
+
+2. **Resume Optimizer**:
+   - Input for existing resume text.
+   - Input for specific job descriptions.
+   - AI logic to tailor the resume, ensuring it highlights keywords and experiences relevant to the target role.
+
+3. **Cover Letter Generator**:
+   - Ability to generate a professional cover letter from a resume and job description.
+   - Tone must be professional and enthusiastic.
+
+4. **Contextual Q&A**:
+   - Feature to take a list of application questions and provide answers derived from the user's resume.
+
+## Security & Environment
+- API keys must be kept secret and handled server-side.
+- The application must support a `.env` configuration.
+- Branding should be professional and focused on "ApplyFlow.AI".
